@@ -18,7 +18,7 @@ describe('API test - SAP assignment', () => {
   });
 
 
-  it('Create new contact', () => {
+  it('Create a new contact', () => {
       cy.request({                        // Use POST request using "contactData" properties to create new contact.
         method: 'POST',
         url: '/crm/v3/objects/contacts',
@@ -51,7 +51,7 @@ describe('API test - SAP assignment', () => {
   })
 
 
-  it('Update the new contact details', () => {
+  it('Update the contact details', () => {
     const newDetails = {        // New details to update our contact. 
       firstname:'Alexandra',
       phone:'0545552280',
@@ -84,7 +84,7 @@ describe('API test - SAP assignment', () => {
   })
 
 
-  it('Delete the new contact', () => {
+  it('Delete the contact', () => {
     cy.getContactDataByEmail(contactData.properties.email, token).then((data => {       // Get contact data by email using custom command.
       const contactId = data.id
 
