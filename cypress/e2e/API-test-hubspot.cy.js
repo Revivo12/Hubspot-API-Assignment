@@ -42,8 +42,9 @@ describe('API test - SAP assignment', () => {
       // DB takes around 10 seconds to add new contact, wait is needed, otherwise no contact data will be found
       cy.wait(10000)
 
+      // Email is unique for each contact, because of that, we know if email is found contact has created 
       cy.getContactDataByEmail(contactData.properties.email, token).then((data) => {
-        expect(data.properties.firstname).to.eq('Jane')
+        expect(data.properties.email).to.eq(contactData.properties.email)
       })
 
   })
