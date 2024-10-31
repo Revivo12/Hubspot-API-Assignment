@@ -25,8 +25,6 @@
 // Cypress.Commands.overwrite('visit', (originalFn, url, options) => { ... })
 
 
-
-
 Cypress.Commands.add('getContactDataByEmail', (email, token) => {       // Custom command - made to get contact data by contact's email 
     cy.request({
       method: 'POST',
@@ -61,3 +59,7 @@ Cypress.Commands.add('getContactDataByEmail', (email, token) => {       // Custo
     });
   });
   
+
+  Cypress.Commands.add('waitForDataToLoad', (time) => {
+    cy.wait(time * 1000) 
+  })
