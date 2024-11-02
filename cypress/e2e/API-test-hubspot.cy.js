@@ -11,7 +11,7 @@ describe('API test - SAP assignment', () => {
   let contactData
   const token = Cypress.env('HUB_BEARER_TOKEN');      // Token is set as an environment variable.
  
-  beforeEach(() => {
+  before(() => {
     cy.fixture('./newContactDetails').then((details) => {      // Load the fixture data before each test into "contactData" variable.
       contactData = details; 
     });
