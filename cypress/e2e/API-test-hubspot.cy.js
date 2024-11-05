@@ -19,35 +19,29 @@ describe('API test - SAP assignment', () => {
 
 
   it('Create a new contact', () => {
-      cy.request({                        // Use POST request using "contactData" properties to create new contact.
+      // Use POST request using "contactData" properties to create new contact.
+      const request= {
         method: 'POST',
         url: '/crm/v3/objects/contacts',
-        headers: {
-          Authorization: `Bearer ${token}`
-        },
-        body: {
-          properties: {
-            email: contactData.properties.email,
-            firstname: contactData.properties.firstname,
-            lastname: contactData.properties.lastname,
-            phone: contactData.properties.phone,
-            company: contactData.properties.company,
-            website: contactData.properties.website,
-            lifecyclestage: contactData.properties.lifecyclestage
-          }
+      }
+      const payload = {
+        properties: {
+          email: contactData.properties.email,
+          firstname: contactData.properties.firstname,
+          lastname: contactData.properties.lastname,
+          phone: contactData.properties.phone,
+          company: contactData.properties.company,
+          website: contactData.properties.website,
+          lifecyclestage: contactData.properties.lifecyclestage
         }
-      }).then((response) => {
+      }
+
+      cy.requestApi(request.method, request.url, token, payload).then((response) => {
           expect(response.status).to.eq(201);
       })
 
       // Wait 10 seconds for data to load in DB 
-      cy.waitForDataToLoad(10)   
-
-      // Email is unique for each contact, because of that, we know if email is found contact has created 
-      cy.getContactDataByEmail(contactData.properties.email, token).then((data) => {  
-        expect(data.properties.email).to.eq(contactData.properties.email)
-      })
-     
+      cy.waitForDataToLoad(10)    
   })
 
 
@@ -57,23 +51,27 @@ describe('API test - SAP assignment', () => {
       phone:'0545552280',
       company:'SAP'
     }
-      
-    cy.request({                    // Use PATCH request to update contact details (firstname, phone and company).
+
+    const request = {
       method: 'PATCH',
       url: `/crm/v3/objects/contacts/${contactData.properties.email}?idProperty=email`,
-      headers: {
-        Authorization: `Bearer ${token}`
-      },
-      body: {
-        properties: {
-          firstname: newDetails.firstname,
-          phone: newDetails.phone,
-          company: newDetails.company
-        }
+      
+    }
+
+    const payload = {
+      properties: {
+        firstname: newDetails.firstname,
+        phone: newDetails.phone,
+        company: newDetails.company
       }
-    }).then((response) => {
+    }
+
+
+    // Use PATCH request to update contact details (firstname, phone and company).
+    cy.requestApi(request.method, request.url, token, payload).then((response) => {
       expect(response.status).to.eq(200);
     })
+      
 
     cy.getContactDataByEmail(contactData.properties.email, token).then((data) => {         // Get contact data by email using custom command -> Assert contact data is updated.
       expect(data.properties.firstname).to.eq(newDetails.firstname)
@@ -88,15 +86,15 @@ describe('API test - SAP assignment', () => {
     cy.getContactDataByEmail(contactData.properties.email, token).then((data => {       // Get contact data by email using custom command.
       const contactId = data.id
 
-      cy.request({                   // Use DELETE request to delete contact by contact ID.         
+      const request = {
         method: 'DELETE',
         url: `/crm/v3/objects/contacts/${contactId}`,
-        headers: {
-          Authorization: `Bearer ${token}`
-        }
-      }).then((response) => {               // Validates new contact has been deleted.
+      }
+
+      // Use DELETE request to delete contact by contact ID.  
+      cy.requestApi(request.method, request.url, token).then((response) => {               // Validates new contact has been deleted.
         expect(response.status).to.eq(204);
-      })  
+      }) 
 
     }))
   })

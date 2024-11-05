@@ -14,6 +14,7 @@
 // ***********************************************************
 
 // Import commands.js using ES2015 syntax:
+/// <reference types="cypress" />
 import './commands'
 
 // Alternatively you can use CommonJS syntax:

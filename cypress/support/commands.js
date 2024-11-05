@@ -25,6 +25,7 @@
 // Cypress.Commands.overwrite('visit', (originalFn, url, options) => { ... })
 
 
+
 Cypress.Commands.add('getContactDataByEmail', (email, token) => {       // Custom command - made to get contact data by contact's email 
     cy.request({
       method: 'POST',
@@ -58,6 +59,19 @@ Cypress.Commands.add('getContactDataByEmail', (email, token) => {       // Custo
 
     });
   });
+
+  Cypress.Commands.add('requestApi', (method, url, token, body) => {
+    cy.request({                        
+      method: method,
+      url: url,
+      headers: {
+        Authorization: `Bearer ${token}`
+      },
+      body: body
+    }).then(response => {
+      return response
+    })
+  })
   
 
   Cypress.Commands.add('waitForDataToLoad', (time) => {
